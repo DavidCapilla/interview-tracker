@@ -8,7 +8,7 @@ A web app to track job applications and selection processes, built with FastAPI.
 | --------- | ---------------------------------------------- |
 | uv        | Python + dependency manager (creates `.venv`)  |
 | Python    | 3.12 (pinned in `.python-version`, managed by uv) |
-| FastAPI   | Web framework, served by Uvicorn               |
+| FastAPI   | Web framework, served by Uvicorn via FastAPI CLI |
 | Jinja2    | HTML templating                                |
 | pytest    | Tests                                          |
 | ruff      | Linting and formatting                         |
@@ -41,18 +41,13 @@ installs this project in editable mode.
 ### 3. Run the app
 
 ```sh
-uv run interview-tracker
+uv run fastapi dev app/main.py
 ```
 
-Equivalent alternatives:
-
-```sh
-uv run python -m interview_tracker
-uv run uvicorn interview_tracker.main:app --reload
-```
+This starts the dev server with auto-reload on code changes.
 
 Then open http://127.0.0.1:8000 — the interactive API docs are at `/docs`,
-and a health check at `/health`. The dev server auto-reloads on code changes.
+and a health check at `/health`.
 
 ## Everyday commands
 
@@ -62,7 +57,7 @@ All commands run through `uv run`, so they always use the project venv.
 uv run pytest                 # run tests
 uv run ruff check .           # lint
 uv run ruff format .          # format code
-uv run mypy                   # type-check src/ and tests/
+uv run mypy                   # type-check app/ and tests/
 ```
 
 Before pushing: make sure pytest, ruff, and mypy all pass.
@@ -79,21 +74,20 @@ This updates both `pyproject.toml` and `uv.lock`. Commit both.
 ## Project layout
 
 ```
-app/documentation/       # domain diagrams (PNGs)
-src/interview_tracker/   # application source code
-    main.py              # FastAPI app entry point + run() for the server
-    __main__.py          # enables `python -m interview_tracker`
-templates/               # Jinja2 HTML templates
-static/                  # CSS / JS assets
-tests/                   # pytest test suite
-pyproject.toml           # project metadata, dependencies, tool config
-uv.lock                  # locked dependency versions (commit this)
-.python-version          # Python version pin used by uv
+app/                          # application source code
+    main.py                   # FastAPI app definition
+    __init__.py               # makes app a package
+    documentation/            # domain diagrams (PNGs)
+tests/                        # pytest test suite
+    test_main.py              # smoke test for /health endpoint
+pyproject.toml                # project metadata, dependencies, tool config
+uv.lock                       # locked dependency versions (commit this)
+.python-version               # Python version pin used by uv
 ```
 
-Source code lives under `src/` ([src layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/)):
-the package is installed into the venv in editable mode, so imports work the
-same in tests as in production.
+Source code lives directly in `app/` — the FastAPI CLI runs it with
+`app/main.py` as the entry point. Tests import from `app.main` and use
+FastAPI's `TestClient` for verification.
 
 ## Definitions
 
