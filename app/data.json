@@ -1,0 +1,18 @@
+{
+  "applications": [
+    {
+      "id": "1",
+      "companyName": "Amazon",
+      "date": "01/01/2000",
+      "position": "Full Stack Developer"
+    },
+    {
+      "id": "2",
+      "companyName": "N26",
+      "date": "03/01/2020",
+      "position": "Front End Developer"
+    }
+  ]
+}
+
+
