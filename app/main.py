@@ -41,4 +41,7 @@ def read_applications() -> list[Application]:
 
 # datetime(2025, 3, 1, 14, 30)
 
-
+# TODO retrieve data from data.json
+# TODO POST
+# TODO com guardar la info
+# TODO SSH keys
